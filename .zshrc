@@ -63,6 +63,7 @@ eval "$(rbenv init -)"
 alias make='make CFLAGS="${CFLAGS}" CPPFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j'
 alias ls='ls --color=auto'
 alias ll='ls -lha'
+alias lll='ll | less'
 alias l='ls -a'
 alias gitlog='git log --pretty=format:"%h : %an : %ar : %s"'
 alias webfs='sshfs -o nonempty,noatime jay@72.14.185.190:/home/jay/web /home/jay/web'
