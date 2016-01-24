@@ -3,14 +3,22 @@
 NAME=$1
 URL=$2
 
-if [ ${NAME} ] && [ ${URL} ]; then
-	cd /home/jay/repos
+# I'm just gonna assume that $HOME is the home directory...
+
+if [ $NAME ] && [ $URL ]; then
+	if [ ! -s $HOME/repos ]; then
+		mkdir -p $HOME/repos
+	fi
+	cd $HOME/repos
 	git clone --recursive $URL
 	cd $NAME
-	git remote set-url origin http://that.pub:3080/$NAME
+	NEW_REPO=$(src repo create $NAME)
+	git remote set-url origin $NEW_REPO
 	git push -u origin master
 else
 	echo "Usage: repo <repo name> <repo URL>"
 	exit 1;
 fi
-
+echo "....................................."
+echo "Repo cloned and added to Sourcegraph."
+echo "---> Yay :)"
