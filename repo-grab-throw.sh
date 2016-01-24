@@ -2,7 +2,7 @@
 
 NAME=$1
 URL=$2
-
+ 
 if [ $NAME ] && [ $URL ]; then
 	if [ ! -s $HOME/repos ]; then
 		mkdir -p $HOME/repos
