@@ -18,3 +18,5 @@ ln -s $CWD/repo-grab-throw.sh $BIN/repo
 ln -s $CWD/start-srcgraph.sh $BIN/srcstart
 ln -s $CWD/upgrade-server.sh $BIN/upgrade
 
+sh $CWD/setup-ruby-and-sass.sh
+sh $CWD/setup-srcgraph.sh
