@@ -1,8 +1,11 @@
 #!/bin/sh
 
-cd ~
+cd $HOME
 curl -O -L https://sourcegraph.com/.download/latest/linux-amd64/src.gz
 gunzip src.gz
 chmod +x src
-cp src ~/bin
-./src serve
+if [ ! -s $HOME/bin ]; then
+    mkdir -p $HOME/bin
+fi
+cp src $HOME/bin
+src serve
