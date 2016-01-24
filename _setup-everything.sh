@@ -20,3 +20,4 @@ ln -s $CWD/upgrade-server.sh $BIN/upgrade
 
 sh $CWD/setup-ruby-and-sass.sh
 sh $CWD/setup-srcgraph.sh
+sh $CWD/setup-elasticsearch.sh
