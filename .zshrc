@@ -76,4 +76,5 @@ if [ -s ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 	source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
 	git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+	source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
