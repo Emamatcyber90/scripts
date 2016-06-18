@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Thank you for this CWD script, @glenn-jackman
+# http://stackoverflow.com/a/1820039/2780033
+CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+
+if [ ! -s $HOME/bin ]; then
+    mkdir -p $HOME/bin
+fi
+
+BIN=$HOME/bin
+
+chmod +x $CWD/*
+
+ln -s $CWD/firewall-update $BIN/firewall
+ln -s $CWD/nodeswap $BIN/nodeswap
+ln -s $CWD/repo-grab-throw $BIN/repo
+ln -s $CWD/start-srcgraph $BIN/srcstart
+ln -s $CWD/upgrade-server $BIN/upgrade
+ln -s $CWD/ruby-and-sass-setup $BIN/ruby-setup
+ln -s $CWD/src-graph-setup $BIN/src-graph-setup
+ln -s $CWD/elasticsearch-setup $BIN/elasticsearch-setup
