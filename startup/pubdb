@@ -1,0 +1,13 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          pubdb
+# Required-Start:    elasticsearch
+# Required-Stop:    
+# Default-Start:     5
+# Default-Stop:     
+# Short-Description: Start the pub db nodes
+# Description:       Just to start the DB nodes
+### END INIT INFO
+
+sh /home/jay/web/pub/dbinit.sh
