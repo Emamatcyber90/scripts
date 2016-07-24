@@ -1,0 +1,8 @@
+#!/bin/sh
+
+apt-get update
+apt-get upgrade -y
+echo $1 > /etc/hostname
+hostname -F /etc/hostname
+cp hosts /etc/hosts
+dpkg-reconfigure tzdata

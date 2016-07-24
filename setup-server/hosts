@@ -1,0 +1,11 @@
+# /etc/hosts file
+
+127.0.0.1       localhost
+127.0.1.1       debian
+72.14.185.190   cardiac that.pub *.that.pub ptnr.us ptnrs.us fleeceitout.com
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+2600:3c00::f03c:91ff:fedf:15ab  cardiac that.pub *.that.pub ptnr.us ptnrs.us fleeceitout.com
