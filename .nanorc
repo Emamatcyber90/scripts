@@ -6,7 +6,6 @@ set wordbounds
 
 include /usr/share/nano/css.nanorc
 include /usr/share/nano/javascript.nanorc
-include /usr/share/nano/go.nanorc
 include /usr/share/nano/html.nanorc
 include /usr/share/nano/java.nanorc
 include /usr/share/nano/c.nanorc

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+su -
+apt-get update
+apt-get upgrade -y
+apt-get install -y zsh build-essential linux-headers-generic nginx git software-properties-common python python-software-properties openssl iptables-persistent
+
+exit 0
