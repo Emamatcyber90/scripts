@@ -3,6 +3,7 @@ set noconvert
 set tabsize 4
 set tabstospaces
 set wordbounds
+set smarthome
 
 include /usr/share/nano/css.nanorc
 include /usr/share/nano/javascript.nanorc
