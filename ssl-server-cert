@@ -1,0 +1,42 @@
+#!/bin/sh
+
+OUTDIR=$HOME/certs/server
+DEFAULT_CONFIG=$HOME/.openssl.cnf
+ORG=thatPub
+
+if [ ! -d $OUTDIR ];then
+    mkdir -p $OUTDIR
+fi
+
+# Avoid port conflicts
+sudo service nginx stop
+
+for HOSTNAME in "$@"
+do
+    CONFIG=/tmp/$HOSTNAME_removeMe.cnf
+
+    echo "DNS.1 = ${HOSTNAME}" | cat $DEFAULT_CONFIG - > $CONFIG
+
+    openssl ecparam -out $OUTDIR/$HOSTNAME.key \
+        -name prime256v1 \
+        -genkey
+
+    openssl req -new -sha256 \
+        -key $OUTDIR/$HOSTNAME.key \
+        -out $OUTDIR/$HOSTNAME.csr \
+        -subj "/C=US/O=${ORG}/CN=${HOSTNAME}" \
+        -config $CONFIG
+
+    sudo letsencrypt -n certonly \
+        --agree-tos \
+        --email "admin@${HOSTNAME}" \
+        --csr $OUTDIR/$HOSTNAME.csr \
+        --cert-path $OUTDIR/$HOSTNAME.pem \
+        --fullchain-path $OUTDIR/$HOSTNAME.chain.pem \
+        --standalone -d $HOSTNAME
+
+    rm -f $CONFIG
+done
+
+# And start it back up
+sudo service nginx start
