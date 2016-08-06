@@ -1,10 +1,16 @@
 #!/bin/sh
 
+BACKPORTS=/etc/apt/sources.list.d/backports.list
+
+if [ ! -s $BACKPORTS ]; then
+    echo "deb http://ftp.debian.org/debian jessie-backports main" | sudo tee $BACKPORTS
+fi
+
 sudo apt-get update
 sudo apt-get upgrade -y
 
 # Basic needs
-sudo apt-get install -y zsh build-essential linux-headers-generic nginx git software-properties-common python python-software-properties openssl iptables-persistent fail2ban sendmail-bin sendmail
+sudo apt-get install -y zsh build-essential linux-headers-amd64 nginx git software-properties-common python python-software-properties openssl iptables-persistent fail2ban sendmail-bin sendmail
 
 # Let's Encrypt
-sudo apt-get install certbot -t jessie-backports
+sudo apt-get install -y certbot -t jessie-backports
