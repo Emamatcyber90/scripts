@@ -3,6 +3,11 @@
 su -
 apt-get update
 apt-get upgrade -y
-apt-get install -y zsh build-essential linux-headers-generic nginx git software-properties-common python python-software-properties openssl iptables-persistent
+
+# Basic needs
+apt-get install -y zsh build-essential linux-headers-generic nginx git software-properties-common python python-software-properties openssl iptables-persistent fail2ban sendmail-bin sendmail
+
+# Let's Encrypt
+apt-get install certbot -t jessie-backports
 
 exit 0
