@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Courtesy of https://digitalelf.net/2016/02/creating-ssl-certificates-in-3-easy-steps/
+
+# $1 = domain or your name
+# $2 = company name
+
+OUTDIR=$HOME/certs
+ORG=thatPub
+
+CA_NAME=$1
+CLIENT_NAME=$2
+
+if [ ! -d $OUTDIR ];then
+    mkdir -p $OUTDIR
+fi
+
+openssl req -new -days 365 -nodes -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -subj "/C=US/O=${ORG}/CN=${CA_NAME}" -keyout $OUTDIR/$CA_NAME.key -out $OUTDIR/$CA_NAME.crt
+
+openssl ecparam -out $OUTDIR/$CLIENT_NAME.key -name prime256v1 -genkey
+openssl req -new -sha256 -subj "/C=US/O=${ORG}/CN=${CLIENT_NAME}" -key $OUTDIR/$CLIENT_NAME.key -out $OUTDIR/$CLIENT_NAME.csr
+
+openssl x509 -req -days 365 -in $OUTDIR/$CLIENT_NAME.csr -CAkey $OUTDIR/$CA_NAME.key -CA $OUTDIR/$CA_NAME.crt -out $OUTDIR/$CLIENT_NAME.crt -set_serial 01
+openssl pkcs12 -export -out $OUTDIR/$CLIENT_NAME.pfx -inkey $OUTDIR/$CLIENT_NAME.key -in $OUTDIR/$CLIENT_NAME.crt -certfile $OUTDIR/$CA_NAME.crt
+sudo cp $OUTDIR/$CA_NAME.crt /usr/local/share/ca-certificates
+sudo update-ca-certificates
+
+echo "Now go to /etc/nginx/conf.d/*.conf"
+echo "Place this in the appropriate level (probably server {} )"
+echo "PS - this assumes you are ON the server already."
+echo "Otherwise scp everything and log in."
+
+echo "# ------"
+echo "ssl_certificate         [**/*]SERVER_CERT.pem;"
+echo "ssl_certificate_key     [**/*]SERVER_KEY.key;"
+
+echo "# This is the CA so connecting users can be verified"
+echo "# ...it just has the worst name ever"
+echo "ssl_client_certificate  ${OUTDIR}/${CA_NAME}.crt;"
+echo "ssl_verify_client on;"
+echo "# ------"
