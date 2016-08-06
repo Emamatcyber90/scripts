@@ -9,7 +9,7 @@
 -A INPUT -p icmp -m state --state NEW --icmp-type 8 -j DROP
 
 # Allow SSH connections.
--A INPUT -p tcp --dport 27701 -m state --state NEW -j ACCEPT
+-A INPUT -p tcp --dport 27606 -m state --state NEW -j ACCEPT
 
 # Allow HTTP and HTTPS connections from anywhere
 # (the normal ports for web servers).
