@@ -1,6 +1,8 @@
 #!/bin/sh
 
 BACKPORTS=/etc/apt/sources.list.d/backports.list
+FAILCONF=/etc/fail2ban/fail2ban.local
+JAILCONF=/etc/fail2ban/jail.local
 
 if [ ! -s $BACKPORTS ]; then
     echo "deb http://ftp.debian.org/debian jessie-backports main" | sudo tee $BACKPORTS
@@ -14,3 +16,12 @@ sudo apt-get install -y zsh build-essential linux-headers-amd64 nginx git softwa
 
 # Let's Encrypt
 sudo apt-get install -y certbot -t jessie-backports
+
+# Some fail2ban setup
+if [ ! -s $FAILCONF ]; then
+    sudo cp /etc/fail2ban/fail2ban.conf $FAILCONF
+fi
+if [ ! -s $JAILCONF ]; then
+    sudo cp /etc/fail2ban/jail.conf $JAILCONF
+fi
+
