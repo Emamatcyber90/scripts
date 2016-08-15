@@ -1,0 +1,51 @@
+###
+# Setup oh-my-zsh for pretty stuff
+#
+# https://github.com/robbyrussell/oh-my-zsh/
+###
+
+if [ ! -d ~/.oh-my-zsh ]; then
+    git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+    cd ~/.oh-my-zsh/plugins
+    git clone git://github.com/l4u/zsh-output-highlighting.git
+    chsh -s /bin/zsh
+fi
+
+if [ ! -s ~/.zshrc.orig ]; then
+    [ -s ~/.zshrc ] && cp ~/.zshrc ~/.zshrc.orig || echo "source ~/scripts/.jay-config" > ~/.zshrc;
+    [ ! -s ~/scripts/.oh-my-zsh-config ] && cat ~/.oh-my-zsh/templates/zshrc.zsh-template > ~/scripts/.oh-my-zsh-config;
+fi
+
+source ~/scripts/.oh-my-zsh-config
+
+export CFLAGS="-march=native -mtune=native -O1"
+export CPPFLAGS="${CFLAGS}"
+export CXXFLAGS="${CFLAGS}"
+export JAVA_HOME=$HOME/jre
+#export GOROOT=$HOME/go
+export PATH=$PATH:$HOME/node/bin:$HOME/npm/bin:$HOME/bin:$JAVA_HOME/bin:/usr/local/go/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/usr/local/cuda-7.0/bin:$HOME/z/idea-IU-143.1821.5/bin:./node_modules/.bin
+export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
+
+# RUBY STUFF
+# eval "$(rbenv init -)"
+
+alias make='make CFLAGS="${CFLAGS}" CPPFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j'
+alias ls='ls --color=auto'
+alias ll='ls -lha'
+alias l='ls -a'
+alias gitlog='git log --pretty=format:"%h : %an : %ar : %s"'
+alias webfs='sshfs -o nonempty,noatime jay@that.pub:/home/jay/web /home/jay/web'
+alias devfs='sshfs -o nonempty,noatime devvm:/ /home/jay/zvm'
+alias gst='git status'
+alias gcmt='git add -A && git commit -m'
+alias scr='screen -r'
+alias scd='screen -dmS'
+
+###
+# Setup the syntax-highlighting (commands that exist = green, missing = red, etc)
+###
+
+if [ ! -s ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
+fi
+source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
