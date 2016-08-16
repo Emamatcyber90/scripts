@@ -1,4 +1,18 @@
 ###
+# Do some auto-complete setup
+###
+
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+###
 # Setup oh-my-zsh for pretty stuff
 #
 # https://github.com/robbyrussell/oh-my-zsh/
@@ -33,6 +47,7 @@ alias make='make CFLAGS="${CFLAGS}" CPPFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j
 alias ls='ls --color=auto'
 alias ll='ls -lha'
 alias l='ls -a'
+alias lll='ll | less'
 alias gitlog='git log --pretty=format:"%h : %an : %ar : %s"'
 alias webfs='sshfs -o nonempty,noatime jay@that.pub:/home/jay/web /home/jay/web'
 alias devfs='sshfs -o nonempty,noatime devvm:/ /home/jay/zvm'
