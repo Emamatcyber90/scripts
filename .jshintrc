@@ -1,0 +1,15 @@
+{
+  "curly": true,
+  "esversion": 5,
+  "forin": true,
+  "freeze": true,
+  "maxcomplexity": 5,
+  "maxdepth": 5,
+  "noarg": true,
+  "nocomma": true,
+  "nonew": true,
+  "quotmark": "single",
+  "shadow": true,
+  "singleGroups": true,
+  "undef": true
+}
