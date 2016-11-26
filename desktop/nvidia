@@ -1,0 +1,5 @@
+#!/bin/sh
+
+add-apt-repository ppa:xorg-edgers/ppa
+apt-get update
+apt-get install nvidia-

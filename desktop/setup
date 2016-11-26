@@ -11,7 +11,7 @@ apt-get update
 
 # Package installs
 
-apt-get install yarn
+apt-get install -y yarn
 
 # Clean-up
 

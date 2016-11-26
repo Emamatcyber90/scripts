@@ -1,0 +1,15 @@
+#!/bin/sh
+
+cd ~
+wget http://download.redis.io/redis-stable.tar.gz
+tar xvzf redis-stable.tar.gz
+cd redis-stable
+
+sudo apt-get install -y tcl8.6 tcl8.6-dev
+
+make distclean
+make MALLOC=libc
+make test
+
+sudo make install
+
