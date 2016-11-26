@@ -1,0 +1,169 @@
+#!/bin/sh
+
+URL="https://dav.box.com/dav"
+URL_TEST="https\:\/\/dav\.box\.com\/dav"
+
+VALID_USER=""
+VALID_PASS=""
+VALID_PATH=""
+DEFAULT_PATH="${HOME}/Box"
+BOX_FSTAB=""
+
+# Thanks @susam-pal!
+# Ref: http://stackoverflow.com/a/28393320/2780033
+
+read_secret() {
+    # Disable echo.
+    stty -echo
+
+    # Set up trap to ensure echo is enabled before exiting if the script
+    # is terminated while echo is disabled.
+    trap 'stty echo' EXIT
+
+    # Read secret.
+    read "$@"
+
+    # Enable echo.
+    stty echo
+    trap - EXIT
+
+    # Print a newline because the newline entered by the user after
+    # entering the passcode is not echoed. This ensures that the
+    # next line of output begins at a new line.
+    echo
+}
+
+trim() {
+    echo "${1}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//';
+}
+
+[ "" != "$(echo "$(dpkg -s davfs2)" | grep -F "'davfs2' is not installed")" ] && apt-get update && apt-get install -y davfs2;
+
+echo "Adding user to group 'davfs2'"
+sudo usermod -a -G davfs2 $USER
+
+while [ "${VALID_USER}" = "" ]
+  do
+    printf "Box.com username: "
+    read BOX_USER
+    VALID_USER=$(trim "${BOX_USER}");
+done
+
+while [ "$(trim "${VALID_PASS}")" = "" ]
+  do
+    printf "Box.com password: "
+    read_secret VALID_PASS
+done
+
+while [ "${VALID_PATH}" = "" ]
+  do
+    printf "Select local mount directory: [${DEFAULT_PATH}] "
+    read BOX_PATH
+    BOX_PATH=${BOX_PATH:-$DEFAULT_PATH}
+    BOX_PATH=$(trim "${BOX_PATH}")
+
+    # If it doesn't exist yet, make it
+    if [ ! -d $BOX_PATH ];then
+        mkdir -p $BOX_PATH
+
+        if [ ! -d $BOX_PATH ];then
+            echo "Could not create or use path.  Try another."
+        else
+            VALID_PATH=$BOX_PATH
+            sudo chown $USER:$USER $VALID_PATH
+        fi
+    else
+        VALID_PATH=$BOX_PATH
+        sudo chown $USER:$USER $VALID_PATH
+    fi
+done
+
+while [ "${BOX_FSTAB}" = "" ]
+  do
+    printf "Mount on start-up: [Y|n] "
+    read BOX_FSTAB
+    BOX_FSTAB=${BOX_FSTAB:-Y}
+    BOX_FSTAB="$(trim "${BOX_FSTAB}" | cut -b 1 | tr '[:upper:]' '[:lower:]')"
+
+    if [ $BOX_FSTAB = "y" ];then
+        # echo "Reading the current /etc/fstab..."
+        # FSTAB_CURRENT="$(cat /etc/fstab)"
+
+        FSTAB_ENTRY="${URL} ${VALID_PATH} davfs user,noauto,uid=${USER},file_mode=600,dir_mode=700 0 1"
+        FSTAB_STRIPPED="$(grep -F "${URL}" -v /etc/fstab)"
+        BACKUP_COUNT="$(($(ls /etc | grep fstab-backup | wc -l)+1))"
+        FSTAB_BACKUP="/etc/fstab-backup${BACKUP_COUNT}"
+        
+        echo "Creating back-up of /etc/fstab at ${FSTAB_BACKUP}"
+        sudo cp /etc/fstab $FSTAB_BACKUP
+
+        # [ "${FSTAB_CURRENT}" != "${FSTAB_STRIPPED}" ] && EXISTS_ALREADY=true || EXISTS_ALREADY=false
+
+        # if [ $EXISTS_ALREADY ];then
+        #     FSTAB_OVERWRITE=""
+        #     while [ "${FSTAB_OVERWRITE}" = "" ]
+        #       do
+        #         echo "!!!"
+        #         echo "Entries already exist for box.com in /etc/fstab"
+        #         printf "Overwrite all: [Y|n] "
+        #         read FSTAB_OVERWRITE
+        #         FSTAB_OVERWRITE=${FSTAB_OVERWRITE:-Y}
+        #         FSTAB_OVERWRITE="$(trim "${FSTAB_OVERWRITE}" | cut -b 1 | tr '[:upper:]' '[:lower:]')"
+        echo "$(echo "${FSTAB_STRIPPED}";echo "${FSTAB_ENTRY}")" | sudo tee /etc/fstab
+        #         if [ "${FSTAB_OVERWRITE}" = "y" ];then
+                    
+        #         else
+        #             if [ "${FSTAB_OVERWRITE}" = "n" ];then
+        #                 echo "Appending entry to end of /etc/fstab..."
+        #                 echo $FSTAB_ENTRY | sudo tee -a /etc/fstab
+        #             else
+        #                 echo "Please answer (Y)es or (N)o"
+        #             fi
+        #         fi
+        #     done
+        # else
+        #     echo "Appending entry to end of /etc/fstab..."
+        #     echo $FSTAB_ENTRY | sudo tee -a /etc/fstab
+        # fi
+
+        echo "Saving username and password to ~/.davfs2/secrets"
+        [ ! -d ~/.davfs2 ] && mkdir ~/.davfs2
+        # if [ $EXISTS_ALREADY ];then
+        #     echo "${VALID_PATH} ${VALID_USER} \"${VALID_PASS}\"" >> ~/.davfs2/secrets
+        # else
+        SECRETS_ENTRY="${VALID_PATH} ${VALID_USER} ${VALID_PASS}"
+        SECRETS_STRIPPED=""
+        if [ -f ~/.davfs2/secrets ];then
+            SECRETS_STRIPPED="$(grep -F "${SECRETS_STRING}" -v ~/.davfs2/secrets)"
+            BACKUP_COUNT2="$(($(ls ~/.davfs2 | grep secrets-backup | wc -l) + 1))"
+            SECRETS_BACKUP=~/.davfs2/secrets-backup$BACKUP_COUNT2
+            echo "Backing up original secrets file to ${SECRETS_BACKUP}..."
+            cp ~/.davfs2/secrets $SECRETS_BACKUP
+        fi
+        echo "$(echo "${SECRETS_STRIPPED}";echo "${SECRETS_ENTRY}")" > ~/.davfs2/secrets
+        # fi
+        chmod 0700 ~/.davfs2
+        chmod 0600 ~/.davfs2/secrets
+
+        echo "Mounting to ${VALID_PATH}..."
+        sudo mount $VALID_PATH
+    else 
+        if [ $BOX_FSTAB = "n" ];then
+            echo "Mounting to ${VALID_PATH}..."
+            sudo mount -t davfs "${URL}" $VALID_PATH
+        else
+            BOX_FSTAB=""
+            echo "Please answer (Y)es or (N)o"
+        fi
+    fi
+done
+
+echo ""
+
+if [ "" != "$(mount | grep -F "${VALID_PATH}")" ];then
+    echo "Box.com is now mounted at: ${VALID_PATH}"
+    exit;
+else
+    echo "ERROR: Could not mount Box.com to ${VALID_PATH}"
+    exit 1;
+fi
