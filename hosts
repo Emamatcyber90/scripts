@@ -1,0 +1,41 @@
+127.0.0.1	localhost
+127.0.1.1	jay-tanoshi
+#72.14.185.190	ptnr.us ptnrs.us ptnrs.biz that.pub fleeceitout.com *.ptnr.us *.ptnrs.us *.ptnrs.biz *.that.pub *.fleeceitout.com
+72.14.185.190   that.pub
+72.14.185.190   cardiac.that.pub 
+72.14.185.190   ptnr.us 
+72.14.185.190   ptnrs.co 
+72.14.185.190   ptnrs.biz 
+72.14.185.190   ptnrs.me 
+72.14.185.190   ptnrs.us 
+72.14.185.190   *.that.pub 
+72.14.185.190   *.ptnr.us 
+72.14.185.190   *.ptnrs.co 
+72.14.185.190   *.ptnrs.biz 
+72.14.185.190   *.ptnrs.us 
+72.14.185.190   fleeceitout.com 
+72.14.185.190   *.fleeceitout.com 
+72.14.185.190   *.ptnrs.me
+
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+2600:3c00::f03c:91ff:fedf:15ab  that.pub 
+2600:3c00::f03c:91ff:fedf:15ab  cardiac.that.pub 
+2600:3c00::f03c:91ff:fedf:15ab  ptnr.us 
+2600:3c00::f03c:91ff:fedf:15ab  ptnrs.co 
+2600:3c00::f03c:91ff:fedf:15ab  ptnrs.biz
+2600:3c00::f03c:91ff:fedf:15ab  ptnrs.me 
+2600:3c00::f03c:91ff:fedf:15ab  ptnrs.us 
+2600:3c00::f03c:91ff:fedf:15ab  *.that.pub 
+2600:3c00::f03c:91ff:fedf:15ab  *.ptnr.us 
+2600:3c00::f03c:91ff:fedf:15ab  *.ptnrs.co 
+2600:3c00::f03c:91ff:fedf:15ab  *.ptnrs.biz 
+2600:3c00::f03c:91ff:fedf:15ab  *.ptnrs.us 
+2600:3c00::f03c:91ff:fedf:15ab  fleeceitout.com 
+2600:3c00::f03c:91ff:fedf:15ab  *.fleeceitout.com 
+2600:3c00::f03c:91ff:fedf:15ab  *.ptnrs.me
