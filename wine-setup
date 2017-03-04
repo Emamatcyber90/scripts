@@ -1,0 +1,19 @@
+#!/bin/sh
+
+sudo dpkg --add-architecture i386
+sudo add-apt-repository ppa:wine/wine-builds
+sudo apt-get update
+
+echo "Which version of wine? [devel] or staging"
+read WINE_CHOSEN
+echo "Starting install of wine-${WINE_CHOSEN}..."
+
+if [ $WINE_CHOSEN = "staging" ];then
+    sudo apt-get install --install-recommends winehq-staging;
+else
+    sudo apt-get install --install-recommends winehq-devel;
+fi;
+
+echo "Wine install complete"
+
+exit;
