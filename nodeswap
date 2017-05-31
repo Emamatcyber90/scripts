@@ -1,5 +1,13 @@
-#!/bin/sh
+#!/bin/zsh
 
 mv $HOME/node $HOME/node-prev-tmp
 mv $HOME/node-prev $HOME/node
 mv $HOME/node-prev-tmp $HOME/node-prev
+
+NODE_VER=(node: `node -v`)
+NPM_VER=(npm: `npm -v`)
+
+echo $NODE_VER
+echo $NPM_VER
+
+exit 0
