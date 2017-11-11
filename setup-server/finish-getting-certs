@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# Read the values to pass to certbot
+echo "letsencrypt - Get cert";
+
+echo "--- E-mail ---"
+read EMAIL_FOR_CERT_DOMAIN
+
+echo "--- Domain ---"
+read DOMAIN_FOR_CERT
+
+sudo /opt/letsencrypt/letsencrypt/letsencrypt-auto certonly --email="${EMAIL_FOR_CERT_DOMAIN}" -d "${DOMAIN_FOR_CERT}" --rsa-key-size 4096
+

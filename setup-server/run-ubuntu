@@ -1,0 +1,36 @@
+#!/bin/sh
+
+#BACKPORTS=/etc/apt/sources.list.d/backports.list
+FAILCONF=/etc/fail2ban/fail2ban.local
+JAILCONF=/etc/fail2ban/jail.local
+
+#if [ ! -s $BACKPORTS ]; then
+#    echo "deb http://ftp.debian.org/debian jessie-backports main" | sudo tee $BACKPORTS
+#fi
+
+sudo apt-get update
+sudo apt-get upgrade -y
+
+# Basic needs
+sudo apt-get install -y zsh build-essential linux-headers-amd64 nginx git software-properties-common python python-software-properties openssl fail2ban sendmail-bin sendmail
+
+# Let's Encrypt
+sudo apt-get install -y git-all
+sudo mkdir -p /opt/letsencrypt
+sudo apt-get install -y certbot
+cd /opt/letsencrypt
+sudo git clone https://github.com/letsencrypt/letsencrypt
+sudo chmod g+x letsencrypt/letsencrypt-auto
+sudo ./letsencrypt/letsencrypt-auto --help
+
+# Prompts for email and domain before finally requesting them
+./finish-getting-certs
+
+# Some fail2ban setup
+if [ ! -s $FAILCONF ]; then
+    sudo cp /etc/fail2ban/fail2ban.conf $FAILCONF
+fi
+if [ ! -s $JAILCONF ]; then
+    sudo cp /etc/fail2ban/jail.conf $JAILCONF
+fi
+
