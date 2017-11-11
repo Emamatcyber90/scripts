@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+sudo ufw deny all
+sudo ufw allow 61116
+
