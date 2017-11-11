@@ -30,7 +30,7 @@ if [ ! -s ~/.zshrc.orig ]; then
     [ ! -s ~/scripts/.oh-my-zsh-config ] && cat ~/.oh-my-zsh/templates/zshrc.zsh-template > ~/scripts/.oh-my-zsh-config;
 fi
 
-source ~/scripts/.oh-my-zsh-config
+source /opt/.zshrc
 
 export CFLAGS="-march=native -mtune=native -O1"
 export CPPFLAGS="${CFLAGS}"
@@ -39,6 +39,11 @@ export JAVA_HOME=$HOME/jre
 #export GOROOT=$HOME/go
 export PATH=$PATH:$HOME/node/bin:$HOME/npm/bin:$HOME/bin:$JAVA_HOME/bin:/usr/local/go/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/usr/local/cuda-7.0/bin:$HOME/z/idea-IU-143.1821.5/bin:./node_modules/.bin
 export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
+export REDIS_HOST=127.0.0.1
+export REDIS_PORT=6379
+export REDIS_PATH=/var/run/redis/redis.sock
+export FFL_YEAR=2017
+export LEAGUE_ID=67260
 
 # RUBY STUFF
 # eval "$(rbenv init -)"
