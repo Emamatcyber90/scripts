@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-sudo ufw allow 443
-sudo ufw allow 80
-
