@@ -1,0 +1,79 @@
+#!/bin/zsh
+
+OVERWRITE_OK="N"
+CURRENT_NODE_VERSION=`node -v`
+CURRENT_NPM_VERSION=`npm -v`
+
+if [ -z $1 ];then
+    echo "Please provide version number."
+    echo ""
+    echo "Example:"
+    echo "  ./nodeupgrade 8.9.4"
+    echo ""
+    exit 1
+elif [ "v$1" = $CURRENT_NODE_VERSION ];then
+    read -p "Current and new node versions are equal.  Overwrite current node installation files? [y/N]" $OVERWRITE_OK
+    [ $OVERWRITE_OK = "Y" ] && exit 1;
+fi
+
+TIMESTAMP=`date +%s%N`
+TEMP_DIR="/tmp/temp_node_$TIMESTAMP"
+NEW_VERSION="v$1"
+NEW_VERSION_FILENAME="node-$NEW_VERSION-linux-x64.tar.xz"
+NEW_VERSION_PATH="$HOME/$NEW_VERSION_FILENAME"
+
+if [ -d $HOME/node ];then
+    echo "--> Current versions:"
+    echo "------------------"
+    echo "node: $CURRENT_NODE_VERSION"
+    echo "npm: $CURRENT_NPM_VERSION"
+
+    echo "--> Backup current node..."
+    echo "------------------"
+    mv $HOME/node $HOME/node-bak
+    echo "--> node-$CURRENT_VERSION now in $HOME/node-$CURRENT_VERSION-bak"
+    echo "------------------"
+    echo "--> Done."
+fi
+
+if [ ! -e $NEW_VERSION_PATH ];then
+    echo "--> Get version $NEW_VERSION"
+    echo "------------------"
+    wget "https://nodejs.org/dist/$NEW_VERSION/$NEW_VERSION_FILENAME" -O $NEW_VERSION_PATH
+    echo "------------------"
+    echo "--> Done."
+fi
+
+echo "--> Extract from $NEW_VERSION_PATH to $TEMP_DIR"
+echo "------------------"
+[ ! -d $TEMP_DIR ] && mkdir -p $TEMP_DIR
+tar xf $NEW_VERSION_PATH -C $TEMP_DIR
+echo "------------------"
+echo "--> Done."
+
+echo "--> Move new version to $HOME/node"
+echo "------------------"
+mv $TEMP_DIR/node-$NEW_VERSION-linux-x64 $HOME/node
+echo "------------------"
+echo "--> Done."
+
+NODE_VER=`node -v`
+NPM_VER=`npm -v`
+
+echo "--> New versions:"
+echo "------------------"
+echo "node: $NODE_VER"
+echo "npm: $NPM_VER"
+echo "------------------"
+
+echo "--> Clean up"
+[ -d $HOME/node-prev-old ] && rm -rf $HOME/node-prev-old
+[ -d $HOME/node-prev ] && mv $HOME/node-prev $HOME/node-prev-old
+[ -d $HOME/node-bak ] && mv $HOME/node-bak $HOME/node-prev
+[ -d $TEMP_DIR ] && rm -rf $TEMP_DIR
+echo "------------------"
+echo "--> Done."
+
+echo "-----> Bye."
+
+exit 0

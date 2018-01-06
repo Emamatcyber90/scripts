@@ -5,11 +5,21 @@ export JAVA_HOME=$HOME/jre
 #export GOROOT=$HOME/go
 export PATH=$PATH:$HOME/node/bin:$HOME/npm/bin:$HOME/bin:$JAVA_HOME/bin:/usr/local/go/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/usr/local/cuda-7.0/bin:./node_modules/.bin
 #export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
+export FFL_YEAR=2017
+export LEAGUE_ID=67260
+export FAKE_ROOT_DIR=$HOME/fake-data
+export FAKE_EXPORT_DIR=$HOME/k/exa-uploads
+
+export EXA_DB=pacs_live_ish
+export KIWI_HTTP_PORT=9001
+
+export DS_HTTP_PORT=9002
+export DS_WS_PORT=6020
+
 export REDIS_HOST=127.0.0.1
 export REDIS_PORT=6379
 export REDIS_PATH=/var/run/redis/redis.sock
-export FFL_YEAR=2017
-export LEAGUE_ID=67260
+
 
 # RUBY STUFF
 # eval "$(rbenv init -)"
