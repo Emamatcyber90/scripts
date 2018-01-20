@@ -1,0 +1,84 @@
+#!/bin/zsh
+
+FIRST_CIPHER=aes-256-xts
+SECOND_CIPHER=des-ede3-cbc
+THIRD_CIPHER=aes-256-ctr
+
+IN_FILE=wallet.dat
+OUT_FILE=.wallet.dat
+
+if [ ! -z $1 ]; then
+    if [ -e $1 ]; then
+        IN_FILE=$1;
+    else
+        echo "File does not exist.  Exiting..."
+        exit 1;
+    fi
+else
+    echo "No valid input file specified, using default.";
+fi
+
+if [ -z $2 ]; then
+    echo "No output specified, using default.";
+else
+    if [ ! -e $2 ]; then
+        touch $2
+        if [ ! -e $2 ]; then
+            echo "Output filename invalid or inaccessible.  Exiting...";
+            exit 1;
+        else
+            OUT_FILE=$2;
+        fi
+    else
+        mv $2 $2.bak
+        OUT_FILE=$2
+    fi
+fi
+
+echo "Input file: $IN_FILE"
+echo "Output file: $OUT_FILE";
+
+while [ -z $FIRST_KEY ]
+do
+    stty -echo
+    printf "\n"
+
+    printf "Enter passphrase: "
+    read FIRST_KEY
+    printf "\n"
+
+    printf "Re-enter passphrase: "
+    read FIRST_KEY_REPEAT
+    printf "\n"
+
+    stty echo
+    printf "\n"
+
+    if [ ${#FIRST_KEY} -lt 10 ]; then
+        echo "Must be at least 10 characters!";
+        FIRST_KEY="";
+    elif [ ! $FIRST_KEY = $FIRST_KEY_REPEAT ]; then
+        echo "Passphrases must match!"
+        FIRST_KEY="";
+    fi
+done
+
+EXTRA_PREFIX="(stdin)= "
+
+SECOND_KEY_HASH=`echo $FIRST_KEY | openssl dgst -sha512`
+SECOND_KEY=${SECOND_KEY_HASH#$EXTRA_PREFIX}
+
+THIRD_KEY_HMAC_DIGEST=`echo $FIRST_KEY | openssl dgst -hmac $SECOND_KEY -whirlpool`
+THIRD_KEY=${THIRD_KEY_HMAC_DIGEST#$EXTRA_PREFIX}
+
+echo "Encrypting..."
+openssl enc -$FIRST_CIPHER -e -salt -k $FIRST_KEY -in $IN_FILE | \
+    openssl enc -$SECOND_CIPHER -e -salt -k $SECOND_KEY | \
+    openssl enc -$THIRD_CIPHER -e -salt -k $THIRD_KEY -out $OUT_FILE
+echo "Done."
+
+printf "\n"
+tar cJf $IN_FILE.tar.xz $OUT_FILE enc dec
+echo "New file created: $OUT_FILE"
+echo "Archive created: $IN_FILE.tar.xz"
+

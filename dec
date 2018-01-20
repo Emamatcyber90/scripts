@@ -1,0 +1,66 @@
+#!/bin/zsh
+
+FIRST_CIPHER=aes-256-xts
+SECOND_CIPHER=des-ede3-cbc
+THIRD_CIPHER=aes-256-ctr
+
+IN_FILE=.wallet.dat
+OUT_FILE=wallet.dat
+
+if [ ! -z $1 ]; then
+    if [ -e $1 ]; then
+        IN_FILE=$1;
+    else
+        echo "File does not exist.  Exiting..."
+        exit 1;
+    fi
+else
+    echo "No valid input file specified, using default.";
+fi
+
+if [ -z $2 ]; then
+    echo "No output specified, using default.";
+else
+    if [ ! -e $2 ]; then
+        touch $2
+        if [ ! -e $2 ]; then
+            echo "Output filename invalid or inaccessible.  Exiting...";
+            exit 1;
+        else
+            OUT_FILE=$2;
+        fi
+    else
+        mv $2 $2.bak
+        OUT_FILE=$2
+    fi
+fi
+
+echo "Input file: $IN_FILE"
+echo "Output file: $OUT_FILE";
+
+stty -echo
+printf "\n"
+
+printf "Enter passphrase: "
+read FIRST_KEY
+printf "\n"
+
+stty echo
+printf "\n"
+
+EXTRA_PREFIX="(stdin)= "
+
+SECOND_KEY_HASH=`echo $FIRST_KEY | openssl dgst -sha512`
+SECOND_KEY=${SECOND_KEY_HASH#$EXTRA_PREFIX}
+
+THIRD_KEY_HMAC_DIGEST=`echo $FIRST_KEY | openssl dgst -hmac $SECOND_KEY -whirlpool`
+THIRD_KEY=${THIRD_KEY_HMAC_DIGEST#$EXTRA_PREFIX}
+
+echo "Decrypting file..."
+openssl enc -$THIRD_CIPHER -d -salt -k $THIRD_KEY -in $IN_FILE | \
+    openssl enc -$SECOND_CIPHER -d -salt -k $SECOND_KEY | \
+    openssl enc -$FIRST_CIPHER -d -salt -k $FIRST_KEY -out $OUT_FILE
+echo "Done."
+
+echo "New file created: $OUT_FILE"
+
