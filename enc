@@ -1,11 +1,13 @@
 #!/bin/zsh
 
-FIRST_CIPHER=aes-256-xts
+FIRST_CIPHER=aes-256-ctr
 SECOND_CIPHER=des-ede3-cbc
-THIRD_CIPHER=aes-256-ctr
+THIRD_CIPHER=aes-256-cbc
+
+ENC_FILE_SUFFIX=".enc"
 
 IN_FILE=wallet.dat
-OUT_FILE=.wallet.dat
+OUT_FILE=$IN_FILE$ENC_FILE_SUFFIX
 
 if [ ! -z $1 ]; then
     if [ -e $1 ]; then
@@ -20,6 +22,10 @@ fi
 
 if [ -z $2 ]; then
     echo "No output specified, using default.";
+    OUT_FILE=$IN_FILE$ENC_FILE_SUFFIX
+    if [ -e $OUT_FILE ]; then
+        mv $OUT_FILE $OUT_FILE.bak
+    fi
 else
     if [ ! -e $2 ]; then
         touch $2
@@ -75,10 +81,12 @@ echo "Encrypting..."
 openssl enc -$FIRST_CIPHER -e -salt -k $FIRST_KEY -in $IN_FILE | \
     openssl enc -$SECOND_CIPHER -e -salt -k $SECOND_KEY | \
     openssl enc -$THIRD_CIPHER -e -salt -k $THIRD_KEY -out $OUT_FILE
-echo "Done."
 
 printf "\n"
-tar cJf $IN_FILE.tar.xz $OUT_FILE enc dec
-echo "New file created: $OUT_FILE"
-echo "Archive created: $IN_FILE.tar.xz"
-
+if [ -e $OUT_FILE ]; then
+    echo "New file created: $OUT_FILE"
+    echo "Done."
+else
+    echo "ERROR: failed to create file $OUT_FILE"
+    exit 1;
+fi
