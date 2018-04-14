@@ -3,8 +3,8 @@
 DB_NAME=$1
 DB_FILE=$2
 
-[ -z "$DB_NAME" ] && echo "Usage: pgb [[DB_NAME] [DB_FILE]]" && exit 1;
-[ -z "$DB_FILE" ] && DB_FILE=$DB_NAME;
+[ -z "$DB_NAME" ] && echo "Usage: pgb DB_NAME [DB_FILE]" && exit 1;
+[ -z "$DB_FILE" ] && DB_FILE="${DB_NAME}db";
 
 FILE_PATH="${HOME}/${DB_FILE}"
 

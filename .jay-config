@@ -13,7 +13,7 @@ export FAKE_ROOT_DIR=$HOME/fake-data
 export FAKE_EXPORT_DIR=/tmp/exports
 
 #export EXA_DB=pacs_live_ish_dev
-export EXA_DB=pacs_live_sysp2
+export EXA_DB=kiwi5
 export KIWI_HTTP_PORT=9001
 
 export DS_HTTP_PORT=9002

@@ -3,8 +3,8 @@
 DB_NAME=$1
 DB_FILE=$2
 
-[ -z "$DB_NAME" ] && echo "Usage: pgr [[DB_NAME] [DB_FILE_NAME]]" && exit 1;
-[ -z "$DB_FILE" ] && DB_FILE=$DB_NAME;
+[ -z "$DB_NAME" ] && echo "Usage: pgr DB_NAME [DB_FILE_NAME]" && exit 1;
+[ -z "$DB_FILE" ] && DB_FILE="${DB_NAME}db";
 
 FILE_PATH="${HOME}/${DB_FILE}"
 
@@ -19,10 +19,14 @@ echo "----------"
 echo "Run update_db from exa (if available)";
 echo "----------"
 
-if [ -d $HOME/exa ]; then
+if [ -d $HOME/exa && $RUN_UPDATE_DB = 1 ]; then
 
     psql -U postgres --dbname $DB_NAME --file $HOME/exa/resx/db/updates.sql \
         --no-psqlrc --set ON_ERROR_STOP=1 --no-password --quiet \
         --tuples-only --echo-errors
 
+    echo "Supposedly finished with update_db"
+
 fi;
+
+exit 0;
