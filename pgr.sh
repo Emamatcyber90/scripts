@@ -18,15 +18,3 @@ pg_restore -d $DB_NAME -U postgres $FILE_PATH;
 echo "----------"
 echo "Run update_db from exa (if available)";
 echo "----------"
-
-if [ -d $HOME/exa && $RUN_UPDATE_DB = 1 ]; then
-
-    psql -U postgres --dbname $DB_NAME --file $HOME/exa/resx/db/updates.sql \
-        --no-psqlrc --set ON_ERROR_STOP=1 --no-password --quiet \
-        --tuples-only --echo-errors
-
-    echo "Supposedly finished with update_db"
-
-fi;
-
-exit 0;
