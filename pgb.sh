@@ -11,4 +11,4 @@ FILE_PATH="${HOME}/${DB_FILE}"
 echo "Saving backup of DB ${DB_NAME} to ${FILE_PATH}";
 pg_dump -U postgres --no-owner --encoding UTF8 --format custom --file $FILE_PATH $DB_NAME;
 
-echo "Saved. Use `pgr DB_NAME [DB_FILE]` to restore"
+echo "Saved."
