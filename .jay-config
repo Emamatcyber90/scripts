@@ -1,3 +1,5 @@
+export TWILIO_ACCOUNT_SID=AC3f333d0e0615e2272208c61c263f11ed
+export TWILIO_AUTH_TOKEN=0ad49721d7a9be89d49e7d1c5ca3ad83
 export CFLAGS="-march=native -mtune=native -O1"
 export CPPFLAGS="${CFLAGS}"
 export CXXFLAGS="${CFLAGS}"
@@ -9,78 +11,35 @@ export PATH=$PATH:$HOME/node/bin:$HOME/npm/bin:$HOME/bin:$JAVA_HOME/bin:/usr/loc
 export FFL_YEAR=2017
 export LEAGUE_ID=67260
 export FAKE_ROOT_DIR=$HOME/fake-data
+
 # export FAKE_EXPORT_DIR=$HOME/k/exa-uploads
 export FAKE_EXPORT_DIR=/tmp/exports
 
 #export EXA_DB=pacs_live_ish_dev
-export EXA_DB=kiwi5
-export KIWI_HTTP_PORT=9001
+export EXA_DB=kiwi2
 
+export KIWI_HTTP_PORT=9001
 export DS_HTTP_PORT=9002
 export DS_WS_PORT=6020
-
 export REDIS_HOST=127.0.0.1
 export REDIS_PORT=6379
 export REDIS_PATH=/var/run/redis/redis.sock
 
+#export PG_PORT=5432
+export PG_PORT=5433
 
 # RUBY STUFF
 # eval "$(rbenv init -)"
+
+source ~/scripts/.setup-zshrc
 
 alias make='make CFLAGS="${CFLAGS}" CPPFLAGS="${CFLAGS}" CXXFLAGS="${CFLAGS}" -j'
 alias ls='ls --color=auto'
 alias ll='ls -lha'
 alias lsg='ls | grep '
-alias l='ls -a'
 alias lll='ll | less'
 alias gitlog='git log --pretty=format:"%h : %an : %ar : %s"'
 alias gst='git status'
 alias gcmt='git add -A && git commit -m'
 alias scr='screen -r'
 alias scd='screen -dmS'
-
-###
-# Setup the syntax-highlighting (commands that exist = green, missing = red, etc)
-###
-
-if [ ! -s ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    git clone git://github.com/zsh-users/zsh-syntax-highlighting.git
-fi
-source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-###
-# Do some auto-complete setup
-###
-
-autoload -Uz compinit
-compinit
-#zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-
-###
-# Setup oh-my-zsh for pretty stuff
-#
-# https://github.com/robbyrussell/oh-my-zsh/
-###
-
-if [ ! -d ~/.oh-my-zsh ]; then
-    git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-    cd ~/.oh-my-zsh/plugins
-    git clone git://github.com/l4u/zsh-output-highlighting.git
-    chsh -s /bin/zsh
-fi
-
-if [ ! -s ~/.zshrc.orig ]; then
-    [ -s ~/.zshrc ] && cp ~/.zshrc ~/.zshrc.orig || echo "source ~/scripts/.jay-config" > ~/.zshrc;
-    [ ! -s ~/scripts/.oh-my-zsh-config ] && cat ~/.oh-my-zsh/templates/zshrc.zsh-template > ~/scripts/.oh-my-zsh-config;
-fi
-
-[ ! -s ~/.oh-my-zsh-config ] && cat ~/scripts/.oh-my-zsh-config > ~/.oh-my-zsh-config;
-
-source ~/.oh-my-zsh-config;
-#source ~/.zshrc

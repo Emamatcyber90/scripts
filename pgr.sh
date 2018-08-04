@@ -9,16 +9,16 @@ DB_FILE=$2
 FILE_PATH="${HOME}/${DB_FILE}"
 
 echo "DROP current db at $DB_NAME"
-psql -U postgres -c "DROP DATABASE IF EXISTS ${DB_NAME};";
+psql -U postgres --port $PG_PORT -c "DROP DATABASE IF EXISTS ${DB_NAME};";
 
 echo "CREATE new db at $DB_NAME"
-psql -U postgres -c "CREATE DATABASE ${DB_NAME};";
+psql -U postgres --port $PG_PORT -c "CREATE DATABASE ${DB_NAME};";
 
 echo "ALTER DATABASE to use new schema search path"
-psql -U postgres -c "ALTER DATABASE $DB_NAME SET search_path = public, extensions;";
+psql -U postgres --port $PG_PORT -c "ALTER DATABASE $DB_NAME SET search_path = public, extensions;";
 
 echo "Load DB from $FILE_PATH"
-pg_restore -d $DB_NAME -U postgres $FILE_PATH;
+pg_restore -d $DB_NAME -U postgres --port $PG_PORT $FILE_PATH;
 
 echo "...done"
 
