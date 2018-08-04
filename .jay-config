@@ -1,5 +1,6 @@
-export TWILIO_ACCOUNT_SID=AC3f333d0e0615e2272208c61c263f11ed
-export TWILIO_AUTH_TOKEN=0ad49721d7a9be89d49e7d1c5ca3ad83
+
+[ -s $HOME/.keys ] && source $HOME/.keys;
+
 export CFLAGS="-march=native -mtune=native -O1"
 export CPPFLAGS="${CFLAGS}"
 export CXXFLAGS="${CFLAGS}"
@@ -8,8 +9,6 @@ export WINEPREFIX=$HOME/.wine
 #export GOROOT=$HOME/go
 export PATH=$PATH:$HOME/node/bin:$HOME/npm/bin:$HOME/bin:$JAVA_HOME/bin:/usr/local/go/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:/usr/local/cuda-7.0/bin:./node_modules/.bin
 #export LD_LIBRARY_PATH=/usr/local/cuda-7.0/lib64:$LD_LIBRARY_PATH
-export FFL_YEAR=2017
-export LEAGUE_ID=67260
 export FAKE_ROOT_DIR=$HOME/fake-data
 
 # export FAKE_EXPORT_DIR=$HOME/k/exa-uploads
