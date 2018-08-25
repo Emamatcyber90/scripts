@@ -5,10 +5,11 @@ DB_FILE=$2
 
 [ -z "$DB_NAME" ] && echo "Usage: pgb DB_NAME [DB_FILE]" && exit 1;
 [ -z "$DB_FILE" ] && DB_FILE="${DB_NAME}db";
+[ -z "$PG_PORT" ] && PG_PORT=5432;
 
 FILE_PATH="${HOME}/${DB_FILE}"
 
 echo "Saving backup of DB ${DB_NAME} to ${FILE_PATH}";
 pg_dump -U postgres --port $PG_PORT --no-owner --encoding UTF8 --format custom --file $FILE_PATH $DB_NAME;
 
-echo "Saved."
+echo "...done."
