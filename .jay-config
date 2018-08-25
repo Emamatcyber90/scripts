@@ -17,9 +17,6 @@ export REDIS_HOST=127.0.0.1
 export REDIS_PORT=6379
 export REDIS_PATH=/var/run/redis/redis.sock
 
-#export PG_PORT=5432
-export PG_PORT=5433
-
 # RUBY STUFF
 # eval "$(rbenv init -)"
 
