@@ -1,12 +1,14 @@
 #!/bin/zsh
 
+echo "Setup nano syntax highlighting...";
+
 # Download highlighter files
 if [ ! -d /usr/share/nano-syntax-highlighting ]; then
     sudo git clone https://github.com/scopatz/nanorc.git /usr/share/nano-syntax-highlighting/
 fi
 
 # Create new .nanorc file
-cp .nanorc /tmp
+cp $CWD/.nanorc /tmp
 
 # Get every file available to put in .nanorc
 ls /usr/share/nano-syntax-highlighting/*.nanorc > /tmp/nanorc-files

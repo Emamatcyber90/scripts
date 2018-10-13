@@ -1,22 +1,73 @@
 #!/bin/sh
 
-# Thank you for this CWD script, @glenn-jackman
-# http://stackoverflow.com/a/1820039/2780033
-CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+SETUP_TYPE="$1"
+[ -z "$SETUP_TYPE" ] && SETUP_TYPE="desktop";
 
-if [ ! -s $HOME/bin ]; then
-    mkdir -p $HOME/bin
-fi
+if [ $SETUP_TYPE != "desktop" ]; then
+    if [ $SETUP_TYPE != "server" ]; then
+        echo "Usage: ./init [desktop|server]\n"
+        echo "Failed setting up system - unknown type \"${SETUP_TYPE}\"";
+        exit 1;
+    fi;
+fi;
 
-BIN=$HOME/bin
+export CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P);
 
-chmod +x $CWD/*
+# -------------- START SYSTEM SETUP --------------- #
 
-ln -s $CWD/firewall-update $BIN/firewall
-ln -s $CWD/nodeswap $BIN/nodeswap
-ln -s $CWD/repo-grab-throw $BIN/repo
-ln -s $CWD/start-srcgraph $BIN/srcstart
-ln -s $CWD/upgrade-server $BIN/upgrade
-ln -s $CWD/ruby-and-sass-setup $BIN/ruby-setup
-ln -s $CWD/src-graph-setup $BIN/src-graph-setup
-ln -s $CWD/elasticsearch-setup $BIN/elasticsearch-setup
+
+echo "" > /tmp/.app-install-success.log
+echo "" > /tmp/.app-install-fail.log
+
+###
+## Disable swap
+###
+
+if [ $SETUP_TYPE = "desktop" ]; then
+    $CWD/disable-swap
+fi;
+
+
+###
+## Install apps
+###
+
+$CWD/apps $SETUP_TYPE
+
+
+###
+## Terminal setup-ish
+###
+
+# copy over configs and bin scripts
+$CWD/copy-files
+
+sudo usermod --shell /bin/zsh $USERNAME
+sudo usermod --shell /bin/zsh root
+
+
+if [ $SETUP_TYPE = "server" ]; then
+
+    # nano syntax highlighting
+    [ -f "${CWD}/setup-nano-syntax-highlighting" ] && $CWD/setup-nano-syntax-highlighting || echo "File missing - setup-nano-syntax-highlighting";
+
+fi;
+
+
+###
+## Some GNOME settings
+###
+
+[ $SETUP_TYPE = "desktop" ] && $CWD/gnome-settings;
+
+###
+## Create the new ssh keys
+###
+
+
+## ----
+
+
+echo "\n\n=========\n===========\n\n...Done (hopefully)\n\n";
+
+exit 0;

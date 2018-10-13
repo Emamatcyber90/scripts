@@ -1,5 +1,7 @@
 #!/bin/sh
 
+SETUP_TYPE="$1"
+
 ###
 ## Remove stuff
 ###
@@ -23,6 +25,8 @@ sudo apt-get -y upgrade --show-upgraded
 # Base tools
 $CWD/app-install build-essential;
 $CWD/app-install python;
+$CWD/app-install net-tools;
+$CWD/app-install lm-sensors;
 $CWD/app-install git;
 $CWD/app-install zsh;
 $CWD/app-install openssl;
@@ -51,14 +55,16 @@ if [ $SETUP_TYPE = "desktop" ]; then
     # File manager
     $CWD/app-install exo-utils
 
-    if [ -f "/usr/bin/nautilus" ]; then
-        PCMAN_POST="sudo mv /usr/bin/nautilus /usr/bin/nautilus.bak"
-        PCMAN_POST="${PCMAN_POST} && sudo ln -s /usr/bin/pcmanfm /usr/bin/nautilus"
-    else
-        PCMAN_POST=""
-    fi;
+    #if [ -f "/usr/bin/nautilus" ]; then
+    #    PCMAN_POST="sudo mv /usr/bin/nautilus /usr/bin/nautilus.bak"
+    #    PCMAN_POST="${PCMAN_POST} && sudo ln -s /usr/bin/pcmanfm /usr/bin/nautilus"
+    #else
+    #    PCMAN_POST=""
+    #fi;
 
-    $CWD/app-install pcmanfm "${PCMAN_POST}"
+    #$CWD/app-install pcmanfm "${PCMAN_POST}"
+
+    $CWD/app-install pcmanfm
 
     # -- Dev UI tools
 
