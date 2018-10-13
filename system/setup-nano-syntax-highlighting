@@ -22,4 +22,4 @@ sudo cp /tmp/.nanorc /root
 cp /tmp/.nanorc $HOME/
 
 # Clean up
-# rm /tmp/{.nanorc,nanorc-files}
+rm /tmp/{.nanorc,nanorc-files}

@@ -13,7 +13,5 @@ echo "Keyboard delay: $(gsettings get org.gnome.desktop.peripherals.keyboard del
 
 # Hopefully disable overlay scrollbars
 ENV_FILE_CONTENT=$(cat /etc/environment | grep -v "^GTK_OVERLAY_SCROLLING=.*$")
-# Testing
-echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" > /tmp/new_env_file
-# When finished test, uncomment below
-# echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" > /etc/environment
+cp /etc/environment /etc/environment.bak
+echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" > /etc/environment

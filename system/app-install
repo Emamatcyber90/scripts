@@ -31,7 +31,7 @@ AFTER_INSTALL=$3
 
 # If only one pre-/post-script text present, assume post-
 if [ -z "$AFTER_INSTALL" ]; then
-    AFTER_INSTALL=$BEFORE_INSTALL
+    AFTER_INSTALL="${BEFORE_INSTALL}"
     BEFORE_INSTALL=""
 fi;
 
