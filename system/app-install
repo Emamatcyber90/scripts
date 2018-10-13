@@ -1,0 +1,79 @@
+#!/bin/sh
+
+#####
+## THIS SCRIPT IS VERY UNSAFE IF RAN WITH ROOT BY
+## AN UNKNOWN SOURCE (aka not my own `system-setup` script)
+##
+## YOU HAVE BEEN WARNED.
+#####
+
+###
+# Usage (run as sudo):
+#
+# ./app-install APP_NAME [AFTER_INSTALL [,BEFORE_INSTALL]]
+###
+
+APP_NAME=$1
+
+# If missing app name, silent fail (since nothing to log really)
+if [ -z "$APP_NAME" ]; then
+    exit 0;
+fi;
+
+# Don't proceed if already installed
+[ ! -z "$(dpkg -l | grep -i $APP_NAME)" ] && exit 0;
+
+echo "\n[${APP_NAME}] - installing\n-------------\n"
+
+BEFORE_INSTALL=$2
+
+AFTER_INSTALL=$3
+
+# If only one pre-/post-script text present, assume post-
+if [ -z "$AFTER_INSTALL" ]; then
+    AFTER_INSTALL=$BEFORE_INSTALL
+    BEFORE_INSTALL=""
+fi;
+
+
+# --------- RUN SETUP/INSTALL ----------$
+
+
+###
+## Run pre-install script(s), if present
+## - typically adding apt keys, making directories, adding new apt repository
+###
+
+[ ! -z "$BEFORE_INSTALL" ] && sh -c "$BEFORE_INSTALL";
+
+
+###
+## Install
+###
+
+apt-get install -y $APP_NAME
+
+###
+## Run post-install script(s), if present
+## - typically server/service finalize like `update-rc.d $APP_NAME enable` or changing config stuff
+###
+
+[ ! -z "$AFTER_INSTALL" ] && sh -c "$AFTER_INSTALL";
+
+
+###
+## Verify install best I can for now being lazy
+## - this could be done with apt I just dont remember how
+###
+
+if [ -z "$(dpkg -l | grep -i $APP_NAME)" ]; then 
+    OUT_FILE="/tmp/.app-install-fail.log";
+    echo "\n!!!!!!\n[${APP_NAME}] - FAILED\n!!!!!!\n-------------\n"
+else
+    OUT_FILE="/tmp/.app-install-success.log";
+    echo "\n[${APP_NAME}] - done.\n-------------\n"
+fi;
+
+echo "$APP_NAME\n" >> "${OUT_FILE}"
+
+exit 0;

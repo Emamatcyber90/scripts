@@ -1,0 +1,29 @@
+#!/bin/sh
+
+
+###
+## Get the scripts where the need to be
+###
+
+echo "\n--------\nCOPY CUSTOM CONFIGS TO HOME\n--------\n"
+
+# For current user
+cp ../.zshrc ../.nanorc ../.jshintrc ../.toprc ../.npmrc ../.gitconfig "${HOME}";
+[ $(ls -a "${HOME}" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "CURRENT USER: FAIL!" || echo "CURRENT USER: success";
+
+# For root
+cp ../.zshrc ../.nanorc ../.jshintrc ../.toprc ../.npmrc ../.gitconfig /root;
+[ $(ls -a "/root" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
+
+
+echo "\n--------\nCOPY CUSTOM BIN SCRIPTS TO CENTRAL BIN DIR\n--------"
+
+# For current user
+[ ! -s "${HOME}/bin" ] && mkdir "${HOME}/bin";
+cp ../dec ../enc ../nodeswap ../pgb ../pgr "${HOME}/bin";
+[ $(ls "${HOME}/bin" | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "CURRENT USER: FAIL!" || echo "CURRENT USER: success";
+
+# For root
+[ ! -s /root/bin ] && mkdir /root/bin;
+cp ../dec ../enc ../nodeswap ../pgb ../pgr /root/bin;
+[ $(ls /root/bin | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
