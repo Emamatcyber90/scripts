@@ -1,0 +1,24 @@
+#!/bin/sh
+
+CHROME_URL_BASE="https://dl.google.com/linux/direct"
+CHROME_PKG_NAME="google-chrome-stable"
+CHROME_FILE_NAME="${CHROME_PKG_NAME}_current_amd64.deb"
+CHROME_FILE_PATH="/tmp/${CHROME_FILE_NAME}"
+
+if [ -z "$(dpkg -l | grep -i $CHROME_PKG_NAME)" ]; then
+    
+    wget -o "${CHROME_FILE_PATH}" \
+        "${CHROME_URL_BASE}/${CHROME_FILE_NAME}";
+    
+    if [ -f "${CHROME_FILE_PATH}" ]; then
+        sudo dpkg -i "${CHROME_FILE_PATH}";
+        rm "${CHROME_FILE_PATH}";
+    fi;
+
+fi;
+
+if [ -z "$(dpkg -l | grep -i chrome-gnome-shell)" ]; then
+    
+    sudo apt-get install -y chrome-gnome-shell;
+
+fi;

@@ -8,12 +8,12 @@
 #####
 
 ###
-# Usage (run as sudo):
+# Usage:
 #
 # ./app-install APP_NAME [AFTER_INSTALL [,BEFORE_INSTALL]]
 ###
 
-APP_NAME=$1
+APP_NAME="$1"
 
 # If missing app name, silent fail (since nothing to log really)
 if [ -z "$APP_NAME" ]; then
@@ -25,13 +25,13 @@ fi;
 
 echo "\n[${APP_NAME}] - installing\n-------------\n"
 
-BEFORE_INSTALL=$2
+BEFORE_INSTALL="$2"
 
-AFTER_INSTALL=$3
+AFTER_INSTALL="$3"
 
 # If only one pre-/post-script text present, assume post-
 if [ -z "$AFTER_INSTALL" ]; then
-    AFTER_INSTALL="${BEFORE_INSTALL}"
+    AFTER_INSTALL=$BEFORE_INSTALL
     BEFORE_INSTALL=""
 fi;
 
@@ -44,21 +44,21 @@ fi;
 ## - typically adding apt keys, making directories, adding new apt repository
 ###
 
-[ ! -z "$BEFORE_INSTALL" ] && sh -c "$BEFORE_INSTALL";
+[ ! -z "${BEFORE_INSTALL}" ] && sh -c "${BEFORE_INSTALL}";
 
 
 ###
 ## Install
 ###
 
-apt-get install -y $APP_NAME
+sudo apt-get install -y "${APP_NAME}"
 
 ###
 ## Run post-install script(s), if present
 ## - typically server/service finalize like `update-rc.d $APP_NAME enable` or changing config stuff
 ###
 
-[ ! -z "$AFTER_INSTALL" ] && sh -c "$AFTER_INSTALL";
+[ ! -z "${AFTER_INSTALL}" ] && sh -c "${AFTER_INSTALL}";
 
 
 ###

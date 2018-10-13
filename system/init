@@ -1,22 +1,17 @@
 #!/bin/sh
 
-SETUP_TYPE=$1
+SETUP_TYPE="$1"
 [ -z "$SETUP_TYPE" ] && SETUP_TYPE="desktop";
 
 if [ $SETUP_TYPE != "desktop" ]; then
     if [ $SETUP_TYPE != "server" ]; then
-        echo "Usage: sudo ./init [desktop|server]\n"
+        echo "Usage: ./init [desktop|server]\n"
         echo "Failed setting up system - unknown type \"${SETUP_TYPE}\"";
         exit 1;
     fi;
 fi;
 
-if [ ! -e /root/.profile ]; then
-    echo "Usage: sudo ./init [desktop|server]\n"
-    echo "Failed setting up ${SETUP_TYPE} - run with sudo";
-    exit 1;
-fi;
-
+CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 # -------------- START SYSTEM SETUP --------------- #
 
@@ -29,89 +24,15 @@ echo "" > /tmp/.app-install-fail.log
 ###
 
 if [ $SETUP_TYPE = "desktop" ]; then
-    ./disable-swap
+    $CWD/disable-swap
 fi;
 
-###
-## Remove stuff
-###
-
-apt-get remove --purge -y rhythmbox
-apt-get autoremove --purge -y
-apt-get autoclean
 
 ###
-## Update stuff
+## Install apps
 ###
 
-apt-get -y update
-apt-get -y upgrade --show-upgraded
-
-
-###
-## Standard pkgs
-###
-
-# Base tools
-./app-install build-essential;
-./app-install python;
-./app-install git;
-./app-install zsh;
-./app-install openssl;
-./app-install apt-transport-https;
-
-if [ $SETUP_TYPE = "desktop" ]; then
-
-    ./app-install dconf-tools
-
-    # Misc
-    ./app-install ttf-mscorefonts-installer
-    ./app-install ffmpeg
-
-    # UI/media
-    ./app-install smplayer
-    ./app-install gimp
-    ./app-install inkscape
-    ./app-install audacity
-    ./app-install blender
-
-    # File manager
-    ./app-install exo-utils
-
-    if [ -f "/usr/bin/nautilus" ]; then
-        PCMAN_POST="mv /usr/bin/nautilus /usr/bin/nautilus.bak"
-        PCMAN_POST="${PCMAN_POST} && ln -s /usr/bin/pcmanfm /usr/bin/nautilus"
-    else
-        PCMAN_POST=""
-    fi;
-
-    ./app-install pcmanfm "${PCMAN_POST}"
-
-fi;
-
-# -- Dev UI tools
-
-if [ $SETUP_TYPE = "desktop" ]; then
-
-    # Sublime text\
-    SUBL_PRE="wget -qO - 'https://download.sublimetext.com/sublimehq-pub.gpg' | sudo apt-key add -";
-    SUBL_PRE="${SUBL_PRE} && echo 'deb https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list"
-    SUBL_PRE="${SUBL_PRE} && apt-get update"
-
-    SUBL_POST="mkdir -p '${HOME}/.config/sublime-text-3/Packages/User'"
-    SUBL_POST="${SUBL_POST} && cp ../sublime-user-settings.json '${HOME}/.config/sublime-text-3/Packages/User/Preferences.sublime-settings'"
-
-    ./app-install sublime-text "${SUBL_POST}" "${SUBL_PRE}"
-
-fi;
-
-# -- Servers
-./app-install redis-server
-./app-install nginx
-
-# Postgresql
-PG_POST="update-rc.d postgresql enable && service postgresql start"
-./app-install postgresql "${PG_POST}"
+$CWD/apps $SETUP_TYPE
 
 
 ###
@@ -119,41 +40,30 @@ PG_POST="update-rc.d postgresql enable && service postgresql start"
 ###
 
 # copy over configs and bin scripts
-./copy-files
+$CWD/copy-files
+
+
+if [ $SETUP_TYPE = "server" ]; then
+
+    # nano syntax highlighting
+    [ -f "${CWD}/setup-nano-syntax-highlighting" ] && $CWD/setup-nano-syntax-highlighting || echo "File missing - setup-nano-syntax-highlighting";
+
+fi;
 
 
 ###
 ## Some GNOME settings
 ###
 
-[ $SETUP_TYPE = "desktop" ] && ./gnome-settings;
+[ $SETUP_TYPE = "desktop" ] && $CWD/gnome-settings;
 
 ###
 ## Create the new ssh keys
 ###
 
 
-###
-## Other/extra?
-###
+## ----
 
-if [ $SETUP_TYPE = "server" ]; then
-
-    ./app-install letsencrypt
-
-
-    # nano syntax highlighting
-    echo "Setup nano syntax highlighting...";
-    [ -f "./setup-nano-syntax-highlighting" ] && ./setup-nano-syntax-highlighting || echo "File missing - setup-nano-syntax-highlighting";
-
-fi;
-
-
-echo "\n\nSuccessful packages:\n-------------\n"
-[ -e /tmp/.app-install-success.log ] && cat /tmp/.app-install-success.log;
-
-echo "\n\nFAILED packages:\n-------------\n"
-[ -e /tmp/.app-install-fail.log ] && cat /tmp/.app-install-fail.log;
 
 echo "\n\n=========\n===========\n\n...Done (hopefully)\n\n";
 

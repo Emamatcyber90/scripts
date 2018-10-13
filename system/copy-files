@@ -1,29 +1,46 @@
 #!/bin/sh
 
-
 ###
-## Get the scripts where the need to be
+## Get the configs and scripts where the need to be
 ###
 
 echo "\n--------\nCOPY CUSTOM CONFIGS TO HOME\n--------\n"
 
 # For current user
-cp ../.zshrc ../.nanorc ../.jshintrc ../.toprc ../.npmrc ../.gitconfig "${HOME}";
-[ $(ls -a "${HOME}" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "CURRENT USER: FAIL!" || echo "CURRENT USER: success";
+
+# Copy sublime text settings
+[ -s "${HOME}/.config/sublime-text-3/Packages/User" ] && cp "${CWD}/sublime-user-settings.json" "${HOME}/.config/sublime-text-3/Packages/User/Preferences.sublime-settings";
+
+if [ ! -f "${HOME}/.config/sublime-text-3/Packages/User/Preferences.sublime-settings" ]; then
+    echo "Sublime text config could not copy over - make sure subl 3 is installed";
+fi;
+
+
+cp $CWD/.zshrc $CWD/.nanorc $CWD/.jshintrc $CWD/.toprc $CWD/.npmrc $CWD/.gitconfig "${HOME}";
+
+if [ $(ls -a "${HOME}" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ]; then
+    echo "CURRENT USER: FAIL!";
+else
+    echo "CURRENT USER: success";
+fi;
 
 # For root
-cp ../.zshrc ../.nanorc ../.jshintrc ../.toprc ../.npmrc ../.gitconfig /root;
-[ $(ls -a "/root" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
+sudo cp $CWD/.zshrc $CWD/.nanorc $CWD/.jshintrc $CWD/.toprc $CWD/.npmrc $CWD/.gitconfig /root;
+[ $(sudo ls -a "/root" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
 
 
 echo "\n--------\nCOPY CUSTOM BIN SCRIPTS TO CENTRAL BIN DIR\n--------"
 
 # For current user
 [ ! -s "${HOME}/bin" ] && mkdir "${HOME}/bin";
-cp ../dec ../enc ../nodeswap ../pgb ../pgr "${HOME}/bin";
-[ $(ls "${HOME}/bin" | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "CURRENT USER: FAIL!" || echo "CURRENT USER: success";
+cp $CWD/dec $CWD/enc $CWD/nodeswap $CWD/pgb $CWD/pgr "${HOME}/bin";
+if [ $(ls "${HOME}/bin" | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ]; then
+    echo "CURRENT USER: FAIL!";
+else
+    echo "CURRENT USER: success";
+fi;
 
 # For root
-[ ! -s /root/bin ] && mkdir /root/bin;
-cp ../dec ../enc ../nodeswap ../pgb ../pgr /root/bin;
-[ $(ls /root/bin | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
+sudo mkdir -p /root/bin;
+sudo cp $CWD/dec $CWD/enc $CWD/nodeswap $CWD/pgb $CWD/pgr /root/bin;
+[ $(sudo ls /root/bin | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";

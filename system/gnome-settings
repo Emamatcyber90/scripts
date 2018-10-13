@@ -1,17 +1,22 @@
 #!/bin/sh
 
 
-echo "Gnome settings (keyboard delay, scrollbars, etc)"
+echo "Gnome settings (keyboard delay, scrollbars?, etc)"
+
 
 # Keyboard repeat speed (interval in ms between characters)
+echo "Keyboard repeat interval (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
 gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 16
-echo "Keyboard repeat interval: $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
+echo "Keyboard repeat interval (new): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
 
 # Keyboard input delay
+echo "Keyboard delay (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
 gsettings set org.gnome.desktop.peripherals.keyboard delay 180
-echo "Keyboard delay: $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
+echo "Keyboard delay (new): $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
+
+# Backup original environment file
+sudo cp /etc/environment /etc/environment.bak
 
 # Hopefully disable overlay scrollbars
 ENV_FILE_CONTENT=$(cat /etc/environment | grep -v "^GTK_OVERLAY_SCROLLING=.*$")
-cp /etc/environment /etc/environment.bak
-echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" > /etc/environment
+echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" | sudo tee /etc/environment;

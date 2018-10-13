@@ -3,7 +3,10 @@
 echo "Disabling swap"
 
 # Turn off swap
-swapoff -a
+sudo swapoff -a
+
+# Backup original
+sudo cp /etc/fstab /etc/fstab.bak
 
 # Remove line in fstab with swap
-cat /etc/fstab | grep -v "\\s\\+none\\s\\+swap" > /etc/fstab
+cat /etc/fstab | grep -v "\\s\\+none\\s\\+swap" | sudo tee /etc/fstab;
