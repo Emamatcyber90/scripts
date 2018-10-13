@@ -1,7 +1,5 @@
 #!/bin/sh
 
-SETUP_TYPE="$1"
-
 ###
 ## Remove stuff
 ###

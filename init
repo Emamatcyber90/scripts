@@ -1,6 +1,8 @@
 #!/bin/sh
 
-SETUP_TYPE="$1"
+export CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P);
+export SETUP_TYPE="$1";
+
 [ -z "$SETUP_TYPE" ] && SETUP_TYPE="desktop";
 
 if [ $SETUP_TYPE != "desktop" ]; then
@@ -11,7 +13,6 @@ if [ $SETUP_TYPE != "desktop" ]; then
     fi;
 fi;
 
-export CWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P);
 
 # -------------- START SYSTEM SETUP --------------- #
 
@@ -32,7 +33,7 @@ fi;
 ## Install apps
 ###
 
-$CWD/apps $SETUP_TYPE
+$CWD/apps
 
 
 ###
