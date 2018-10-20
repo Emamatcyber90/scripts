@@ -14,9 +14,13 @@ echo "Keyboard delay (previous): $(gsettings get org.gnome.desktop.peripherals.k
 gsettings set org.gnome.desktop.peripherals.keyboard delay 180
 echo "Keyboard delay (new): $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
 
-# Backup original environment file
-sudo cp /etc/environment /etc/environment.bak
 
-# Hopefully disable overlay scrollbars
-ENV_FILE_CONTENT=$(cat /etc/environment | grep -v "^GTK_OVERLAY_SCROLLING=.*$")
-echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" | sudo tee /etc/environment;
+### Below doesn't seem to be needed in Ubuntu 18.04 somehow (after the rest of init has been ran at least)
+
+
+## Backup original environment file
+# sudo cp /etc/environment /etc/environment.bak
+
+## Hopefully disable overlay scrollbars
+# ENV_FILE_CONTENT=$(cat /etc/environment | grep -v "^GTK_OVERLAY_SCROLLING=.*$")
+# echo "${ENV_FILE_CONTENT}\nGTK_OVERLAY_SCROLLING=0" | sudo tee /etc/environment;
