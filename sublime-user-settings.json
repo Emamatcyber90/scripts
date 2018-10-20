@@ -6,5 +6,8 @@
     "word_wrap": false,
     "drag_text": false,
     "ensure_newline_at_eof_on_save": true,
-    "trim_trailing_white_space_on_save": false
+    "shift_tab_unindent": true,
+    "trim_trailing_white_space_on_save": false,
+    "scroll_speed": 0
 }
+
