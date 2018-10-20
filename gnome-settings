@@ -6,7 +6,7 @@ echo "Gnome settings (keyboard delay, scrollbars?, etc)"
 
 # Keyboard repeat speed (interval in ms between characters)
 echo "Keyboard repeat interval (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
-gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 16
+gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10
 echo "Keyboard repeat interval (new): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
 
 # Keyboard input delay
