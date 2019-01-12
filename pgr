@@ -8,6 +8,8 @@ DB_FILE=$2
 
 FILE_PATH="${HOME}/${DB_FILE}"
 
+[ ! -e "$FILE_PATH" ] && echo "Missing DB file to restore from" && exit 1;
+
 echo "DROP current db at $DB_NAME"
 psql -U postgres --port $PG_PORT -c "DROP DATABASE IF EXISTS ${DB_NAME};";
 
