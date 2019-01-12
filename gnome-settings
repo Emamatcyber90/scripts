@@ -8,12 +8,12 @@ xset m 8/8 0
 
 # Keyboard repeat speed (interval in ms between characters)
 echo "Keyboard repeat interval (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
-gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 10
+gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 16
 echo "Keyboard repeat interval (new): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
 
 # Keyboard input delay
 echo "Keyboard delay (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
-gsettings set org.gnome.desktop.peripherals.keyboard delay 180
+gsettings set org.gnome.desktop.peripherals.keyboard delay 200
 echo "Keyboard delay (new): $(gsettings get org.gnome.desktop.peripherals.keyboard delay)"
 
 

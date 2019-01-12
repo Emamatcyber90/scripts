@@ -1,0 +1,30 @@
+#!/bin/sh
+
+[ -z "$1" ] && PRIORITY=-10 || PRIORITY=$1
+
+PIDS_X=$(pidof Xorg)
+PIDS_CSGO=$(pidof csgo_linux64)
+if [ -z "$PIDS_CSGO" ];then
+    PIDS="$PIDS_X"
+else
+    PIDS="$PIDS_X $PIDS_CSGO"
+fi;
+
+#PIDS=$(pidof csgo_linux64)
+
+echo "Prioritize X process(es)\n"
+
+while [ "$PIDS" ]
+    do
+        FIRST_PID=$(echo $PIDS | cut -d' ' -f1)
+
+        # Handle priority setting of X server (Xorg)
+        echo "Setting Xorg process $FIRST_PID priority to $PRIORITY\n"
+        #sudo renice $PRIORITY $FIRST_PID
+
+        PIDS=$(echo $PIDS | cut -c $((${#FIRST_PID} + 1))-${#PIDS})
+
+    done
+
+echo "\n\n...done prioritizing X"
+exit 0;
