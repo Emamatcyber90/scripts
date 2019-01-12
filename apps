@@ -13,7 +13,7 @@ sudo apt-get autoclean
 ###
 
 sudo apt-get -y update
-sudo apt-get -y upgrade --show-upgraded
+sudo apt-get -y dist-upgrade --show-upgraded
 
 
 ###

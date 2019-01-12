@@ -3,6 +3,8 @@
 
 echo "Gnome settings (keyboard delay, scrollbars?, etc)"
 
+echo "Turn off mouse accel"
+xset m 8/8 0
 
 # Keyboard repeat speed (interval in ms between characters)
 echo "Keyboard repeat interval (previous): $(gsettings get org.gnome.desktop.peripherals.keyboard repeat-interval)"
