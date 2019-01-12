@@ -25,9 +25,9 @@ else
 fi;
 
 # For root
-sudo cp $CWD/.zshrc $CWD/.nanorc $CWD/.jshintrc $CWD/.toprc $CWD/.npmrc $CWD/.gitconfig /root;
-[ $(sudo ls -a "/root" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
-[ -z "$(sudo ls /root | grep '^scripts$')" ] && sudo ln -s "${CWD}" /root/scripts;
+#sudo cp $CWD/.zshrc $CWD/.nanorc $CWD/.jshintrc $CWD/.toprc $CWD/.npmrc $CWD/.gitconfig /root;
+#[ $(sudo ls -a "/root" | grep "\\.zshrc\\|\\.nanorc\\|\\.jshintrc\\|\\.toprc\\|\\.npmrc\\|\\.gitconfig" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";
+#[ -z "$(sudo ls /root | grep '^scripts$')" ] && sudo ln -s "${CWD}" /root/scripts;
 
 
 echo "\n--------\nCOPY CUSTOM BIN SCRIPTS TO CENTRAL BIN DIR\n--------"
@@ -43,7 +43,7 @@ fi;
 
 # For root
 # - link to user's home bin dir so we have a central store of files
-[ -z "$(sudo ls /root | grep '^bin$')" ] && sudo ln -s "${HOME}/bin" /root/bin;
+#[ -z "$(sudo ls /root | grep '^bin$')" ] && sudo ln -s "${HOME}/bin" /root/bin;
 
 #sudo cp $CWD/dec $CWD/enc $CWD/nodeswap $CWD/pgb $CWD/pgr /root/bin;
 #[ $(sudo ls /root/bin | grep "dec\\|enc\\|nodeswap\\|pgb\\|pgr" | wc -l) = 0 ] && echo "root: FAIL!" || echo "root: success";

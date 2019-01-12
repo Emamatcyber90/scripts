@@ -71,7 +71,7 @@ if [ $SETUP_TYPE = "desktop" ]; then
     SUBL_PRE="${SUBL_PRE} && echo 'deb https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list"
     SUBL_PRE="${SUBL_PRE} && sudo apt-get update"
 
-    SUBL_POST="mkdir -p '${HOME}/.config/sublime-text-3/Packages/User'"
+    SUBL_POST="mkdir -p ${HOME}/.config/sublime-text-3/Packages/User"
 
     $CWD/app-install sublime-text "${SUBL_POST}" "${SUBL_PRE}"
 
