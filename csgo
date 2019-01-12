@@ -1,0 +1,2 @@
+# launch options
+-refresh 144hz -freq 144hz -console -novid -threads 4 -noforcemaccel -noforcemparms -noforcemspd
