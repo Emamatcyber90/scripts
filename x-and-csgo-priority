@@ -20,7 +20,7 @@ while [ "$PIDS" ]
 
         # Handle priority setting of X server (Xorg)
         echo "Setting Xorg process $FIRST_PID priority to $PRIORITY\n"
-        #sudo renice $PRIORITY $FIRST_PID
+        sudo renice $PRIORITY $FIRST_PID
 
         PIDS=$(echo $PIDS | cut -c $((${#FIRST_PID} + 1))-${#PIDS})
 
