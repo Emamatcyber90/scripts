@@ -1,0 +1,25 @@
+{
+    "presets": [
+        "@babel/react",
+        ["@babel/preset-env", {
+            "targets": {
+                "node": "current",
+                "browsers": ["last 2 versions", "ie 10"]
+            },
+            "loose": true
+        }],
+        "@babel/preset-flow"
+    ],
+    "plugins": [
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-proposal-export-namespace-from",
+        "transform-node-env-inline",
+        "@babel/plugin-transform-react-constant-elements",
+        "@babel/plugin-transform-react-inline-elements",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
+        ["@babel/plugin-transform-modules-commonjs", { "loose": true }],
+        ["@babel/plugin-transform-runtime", { "corejs": 2, "helpers": false, "regenerator": true }]
+    ]
+}
